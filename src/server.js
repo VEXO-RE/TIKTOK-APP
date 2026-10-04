@@ -10,6 +10,7 @@ import {
 
 import { logger } from "./core/logger.js";
 import { errorHandler } from "./core/errors.js";
+import { tiktokAuthRouter } from "./tiktok/developer/auth/routes.js";
 
 validateEnvironment();
 
@@ -42,14 +43,7 @@ app.get("/config/status", (req, res) => {
   });
 });
 
-/*
-  TikTok routes will be mounted only after:
-  - application registration exists;
-  - product is enabled;
-  - scopes are verified against official documentation;
-  - credentials exist;
-  - corresponding feature flag is enabled.
-*/
+app.use("/auth/tiktok", tiktokAuthRouter);
 
 app.use(errorHandler);
 

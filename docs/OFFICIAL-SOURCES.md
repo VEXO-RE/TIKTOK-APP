@@ -13,6 +13,19 @@ https://developers.tiktok.com/docs/en/login-kit-web
 Login Kit Overview
 https://developers.tiktok.com/docs/en/login-kit-overview
 
+User Access Token Management
+https://developers.tiktok.com/docs/en/oauth-user-access-token-management
+
+Verified: 2026-10-04
+
+- Feature: Login Kit OAuth Web.
+- Scope: `user.info.basic`.
+- Authorization endpoint: `https://www.tiktok.com/v2/auth/authorize/`.
+- Token endpoint: `POST https://open.tiktokapis.com/v2/oauth/token/`.
+- Token request content type: `application/x-www-form-urlencoded`.
+- Implementation: `src/tiktok/developer/auth/`.
+- Status: sandbox/configured; live OAuth test pending.
+
 Content Posting API - Upload
 https://developers.tiktok.com/docs/en/content-posting-api-reference-upload-video
 

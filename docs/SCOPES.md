@@ -5,7 +5,7 @@ official TikTok documentation.
 
 | Scope | Product | Purpose | Status | Official source |
 |---|---|---|---|---|
-| TBD | Login Kit | TBD | not-configured | TBD |
+| user.info.basic | Login Kit | Basic TikTok user identity authorized by the user | sandbox/configured | TikTok Login Kit Overview and Web docs |
 | video.upload | Content Posting API | Upload content for user completion | not-configured | TikTok Content Posting docs |
 
 Statuses:
@@ -15,3 +15,4 @@ Statuses:
 - approved
 - rejected
 - deprecated
+- sandbox/configured

@@ -16,10 +16,11 @@
 - app registration;
 - website;
 - verified domain;
-- Login Kit;
-- minimal scopes;
-- redirect URI;
-- Sandbox.
+- Login Kit: sandbox/configured;
+- minimal scope: `user.info.basic` configured;
+- redirect URI: configured in Sandbox;
+- OAuth Web implementation: complete locally;
+- real end-to-end OAuth validation: pending.
 
 ## Phase 2 — Review UI
 

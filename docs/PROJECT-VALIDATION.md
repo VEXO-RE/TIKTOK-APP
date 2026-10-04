@@ -27,6 +27,16 @@ Automation is intended for:
 
 TikTok.
 
+## Login Kit validation
+
+- Product: Login Kit.
+- Scope: `user.info.basic`.
+- Environment: Sandbox.
+- Configuration status: configured.
+- Implementation status: local OAuth Web flow implemented.
+- Operational status: real end-to-end OAuth test pending.
+- App Review: not asserted as approved.
+
 ## Future platforms
 
 The creative engine and publishing scheduler should become a reusable
