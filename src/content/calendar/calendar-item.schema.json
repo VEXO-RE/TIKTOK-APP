@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ShopinistaMeta Editorial Calendar Item",
+  "type": "object",
+  "required": [
+    "id",
+    "status",
+    "channel",
+    "scheduledAt",
+    "contentType"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "idea",
+        "draft",
+        "review",
+        "approved",
+        "scheduled",
+        "published",
+        "failed"
+      ]
+    },
+    "channel": {
+      "type": "string"
+    },
+    "scheduledAt": {
+      "type": "string"
+    },
+    "contentType": {
+      "enum": [
+        "video",
+        "photo",
+        "carousel",
+        "story",
+        "reel",
+        "post"
+      ]
+    },
+    "campaign": {
+      "type": ["string", "null"]
+    },
+    "productReference": {
+      "type": ["string", "null"]
+    },
+    "categoryReference": {
+      "type": ["string", "null"]
+    },
+    "cta": {
+      "type": ["string", "null"]
+    }
+  }
+}

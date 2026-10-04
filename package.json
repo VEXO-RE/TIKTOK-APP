@@ -1,0 +1,22 @@
+{
+  "name": "shopinistameta-tiktok-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "TikTok organic content, publishing and automation foundation for ShopinistaMeta.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test",
+    "smoke": "node scripts/smoke-test.js",
+    "verify": "node scripts/verify-project.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0"
+  }
+}
