@@ -15,3 +15,20 @@ Initial expectations:
 
 Do not record the final review video before the actual integration is
 working end-to-end.
+
+## Sandbox Upload draft sequence
+
+1. Open `/review/` on the configured HTTPS Sandbox domain.
+2. Select **Connect TikTok** and complete consent for
+   `user.info.basic,video.upload`.
+3. Return to the Review UI and show the connected state.
+4. Select one supported local video and choose **Upload draft to TikTok**.
+5. Show the returned `publish_id` without exposing tokens or `upload_url`.
+6. Query status and show only the response returned by the application.
+7. Open TikTok Inbox, select the notification, review/edit, and publish.
+
+Visible disclosure:
+
+> After upload, open TikTok Inbox to continue editing and publish.
+
+Operational recording remains pending until a real Sandbox upload succeeds.

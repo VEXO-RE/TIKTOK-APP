@@ -9,6 +9,7 @@ import {
   TIKTOK_TOKEN_URL
 } from "../../src/tiktok/developer/auth/oauth.service.js";
 import { createStateStore } from "../../src/tiktok/developer/auth/state.store.js";
+import { createTokenStore } from "../../src/tiktok/developer/tokens/token.store.js";
 
 const configuredEnv = {
   TIKTOK_CLIENT_KEY: "test-client-key",
@@ -90,6 +91,24 @@ test("authorization creates a state and redirects with documented parameters", a
     assert.deepEqual(
       [...location.searchParams.keys()].sort(),
       ["client_key", "redirect_uri", "response_type", "scope", "state"].sort()
+    );
+  });
+});
+
+test("authorization requests video.upload only when Content Upload is enabled", async () => {
+  await withServer({
+    isLoginEnabled: () => true,
+    isContentUploadEnabled: () => true,
+    env: configuredEnv
+  }, async baseUrl => {
+    const response = await fetch(`${baseUrl}/auth/tiktok`, {
+      redirect: "manual"
+    });
+    const location = new URL(response.headers.get("location"));
+
+    assert.equal(
+      location.searchParams.get("scope"),
+      "user.info.basic,video.upload"
     );
   });
 });
@@ -181,7 +200,42 @@ test("callback handles a TikTok authorization error without token exchange", asy
   });
 });
 
-test("token exchange uses the documented form request and returns no tokens", async () => {
+test("successful callback stores the access token but never returns it", async () => {
+  const store = createStateStore();
+  const state = store.create();
+  const tokens = createTokenStore();
+
+  await withServer({
+    isLoginEnabled: () => true,
+    env: configuredEnv,
+    store,
+    tokens,
+    exchangeCode: async () => ({
+      openId: "test-open-id",
+      scope: "user.info.basic,video.upload",
+      accessToken: "opaque-server-only-value",
+      expiresIn: 3600
+    })
+  }, async baseUrl => {
+    const response = await fetch(
+      `${baseUrl}/auth/tiktok/callback?code=test-code&state=${encodeURIComponent(state)}`
+    );
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(tokens.get().accessToken, "opaque-server-only-value");
+    assert.doesNotMatch(JSON.stringify(body), /opaque-server-only-value/);
+    assert.deepEqual(body, {
+      ok: true,
+      connected: true,
+      provider: "tiktok",
+      openId: "test-open-id",
+      scope: "user.info.basic,video.upload"
+    });
+  });
+});
+
+test("token exchange uses the documented form request for server-side storage", async () => {
   let request;
   const result = await exchangeAuthorizationCode({
     code: "decoded-code",
@@ -197,6 +251,7 @@ test("token exchange uses the documented form request and returns no tokens", as
         open_id: "test-open-id",
         scope: "user.info.basic",
         access_token: "must-not-escape",
+        expires_in: 86400,
         refresh_token: "must-not-escape"
       }), {
         status: 200,
@@ -217,7 +272,8 @@ test("token exchange uses the documented form request and returns no tokens", as
   );
   assert.deepEqual(result, {
     openId: "test-open-id",
-    scope: "user.info.basic"
+    scope: "user.info.basic",
+    accessToken: "must-not-escape",
+    expiresIn: 86400
   });
-  assert.doesNotMatch(JSON.stringify(result), /must-not-escape/);
 });

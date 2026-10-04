@@ -5,14 +5,19 @@ import { AppError } from "../../../core/errors.js";
 import {
   buildAuthorizationUrl,
   exchangeAuthorizationCode,
-  getOauthConfig
+  getOauthConfig,
+  TIKTOK_LOGIN_SCOPE,
+  TIKTOK_UPLOAD_SCOPE
 } from "./oauth.service.js";
 import { stateStore } from "./state.store.js";
+import { tokenStore } from "../tokens/token.store.js";
 
 export function createTikTokAuthRouter({
   isLoginEnabled = () => features.tiktokLogin,
+  isContentUploadEnabled = () => features.tiktokContentUpload,
   env = process.env,
   store = stateStore,
+  tokens = tokenStore,
   exchangeCode = exchangeAuthorizationCode
 } = {}) {
   const router = express.Router();
@@ -33,7 +38,10 @@ export function createTikTokAuthRouter({
       res.redirect(buildAuthorizationUrl({
         clientKey: config.clientKey,
         redirectUri: config.redirectUri,
-        state
+        state,
+        scopes: isContentUploadEnabled()
+          ? [TIKTOK_LOGIN_SCOPE, TIKTOK_UPLOAD_SCOPE]
+          : [TIKTOK_LOGIN_SCOPE]
       }));
     } catch (error) {
       next(error);
@@ -76,6 +84,13 @@ export function createTikTokAuthRouter({
       const result = await exchangeCode({
         code: req.query.code,
         config
+      });
+
+      tokens.set({
+        accessToken: result.accessToken,
+        openId: result.openId,
+        scope: result.scope,
+        expiresIn: result.expiresIn
       });
 
       res.json({

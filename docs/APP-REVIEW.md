@@ -33,3 +33,15 @@ Do not request optional products or scopes merely because they may be
 useful in the future.
 
 Request only what the current working integration requires.
+
+## Content Posting evidence still required
+
+- Scope requested by the implementation: `video.upload` only.
+- Show selecting one supported local video in the Review UI.
+- Show the returned `publish_id` and official status.
+- Show the TikTok Inbox notification and the user-controlled editing flow.
+- Show the user completing publication inside TikTok.
+
+Do not describe Upload to TikTok as automatic publication or Direct Post.
+App Review has not been submitted or approved, and Production access is
+not asserted.

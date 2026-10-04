@@ -41,6 +41,18 @@ TikTok.
 - Connected provider: TikTok.
 - App Review: not submitted / not asserted as approved.
 
+## Content Posting validation
+
+- Product: Content Posting API — Upload.
+- Scope: `video.upload`.
+- Environment: Sandbox.
+- Transfer method: `FILE_UPLOAD`.
+- Implementation status: implemented.
+- Operational status: pending a real upload and Inbox confirmation.
+- User action: open the TikTok Inbox notification, review/edit, and publish.
+- Direct Post and `video.publish`: disabled and not implemented.
+- App Review and Production approval: not asserted.
+
 ## Future platforms
 
 The creative engine and publishing scheduler should become a reusable

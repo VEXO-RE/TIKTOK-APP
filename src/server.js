@@ -11,6 +11,7 @@ import {
 import { logger } from "./core/logger.js";
 import { errorHandler } from "./core/errors.js";
 import { tiktokAuthRouter } from "./tiktok/developer/auth/routes.js";
+import { tiktokContentRouter } from "./tiktok/developer/content/routes.js";
 
 validateEnvironment();
 
@@ -44,6 +45,8 @@ app.get("/config/status", (req, res) => {
 });
 
 app.use("/auth/tiktok", tiktokAuthRouter);
+app.use("/api/tiktok/content", tiktokContentRouter);
+app.use("/review", express.static("src/review-ui/public"));
 
 app.use(errorHandler);
 

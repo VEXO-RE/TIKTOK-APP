@@ -3,6 +3,7 @@ import { AppError } from "../../../core/errors.js";
 export const TIKTOK_AUTHORIZE_URL = "https://www.tiktok.com/v2/auth/authorize/";
 export const TIKTOK_TOKEN_URL = "https://open.tiktokapis.com/v2/oauth/token/";
 export const TIKTOK_LOGIN_SCOPE = "user.info.basic";
+export const TIKTOK_UPLOAD_SCOPE = "video.upload";
 
 const REQUIRED_CONFIG = [
   "TIKTOK_CLIENT_KEY",
@@ -29,13 +30,18 @@ export function getOauthConfig(env = process.env) {
   };
 }
 
-export function buildAuthorizationUrl({ clientKey, redirectUri, state }) {
+export function buildAuthorizationUrl({
+  clientKey,
+  redirectUri,
+  state,
+  scopes = [TIKTOK_LOGIN_SCOPE]
+}) {
   const url = new URL(TIKTOK_AUTHORIZE_URL);
 
   url.search = new URLSearchParams({
     client_key: clientKey,
     response_type: "code",
-    scope: TIKTOK_LOGIN_SCOPE,
+    scope: scopes.join(","),
     redirect_uri: redirectUri,
     state
   }).toString();
@@ -98,7 +104,12 @@ export async function exchangeAuthorizationCode({
     );
   }
 
-  if (typeof payload.open_id !== "string" || typeof payload.scope !== "string") {
+  if (
+    typeof payload.open_id !== "string" ||
+    typeof payload.scope !== "string" ||
+    typeof payload.access_token !== "string" ||
+    !Number.isFinite(Number(payload.expires_in))
+  ) {
     throw new AppError(
       "TikTok token response is incomplete.",
       502,
@@ -108,6 +119,8 @@ export async function exchangeAuthorizationCode({
 
   return {
     openId: payload.open_id,
-    scope: payload.scope
+    scope: payload.scope,
+    accessToken: payload.access_token,
+    expiresIn: Number(payload.expires_in)
   };
 }

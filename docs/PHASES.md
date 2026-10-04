@@ -20,24 +20,22 @@
 - minimal scope: `user.info.basic` configured;
 - redirect URI: configured in Sandbox;
 - OAuth Web implementation: complete locally;
-- real end-to-end OAuth validation: pending.
+- real end-to-end OAuth validation: complete in Sandbox.
 
-## Phase 2 — Review UI
+## Phase 2 — Content Posting Upload
 
-- real login flow;
-- consent;
-- callback;
-- supported user data;
-- demo environment.
+- Content Posting product: Sandbox;
+- scope: `video.upload`;
+- local `FILE_UPLOAD` draft flow: implemented;
+- publish status polling: implemented;
+- minimal Review UI: implemented;
+- user completion through TikTok Inbox: documented;
+- real upload validation: pending;
+- Direct Post and `video.publish`: not implemented.
 
-## Phase 3 — Content Posting Upload
+## Phase 3 — Direct Post
 
-- Content Posting product;
-- confirmed scope;
-- media validation;
-- upload;
-- publish status;
-- user completion flow where required.
+Deferred. No `video.publish` implementation or scope request.
 
 ## Phase 4 — Editorial Engine
 
