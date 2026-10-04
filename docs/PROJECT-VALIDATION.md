@@ -33,9 +33,13 @@ TikTok.
 - Scope: `user.info.basic`.
 - Environment: Sandbox.
 - Configuration status: configured.
-- Implementation status: local OAuth Web flow implemented.
-- Operational status: real end-to-end OAuth test pending.
-- App Review: not asserted as approved.
+- Implementation status: OAuth Web flow implemented.
+- Operational status: validated end-to-end.
+- Authorization: successful.
+- Callback: successful.
+- Authorization code exchange: successful.
+- Connected provider: TikTok.
+- App Review: not submitted / not asserted as approved.
 
 ## Future platforms
 
