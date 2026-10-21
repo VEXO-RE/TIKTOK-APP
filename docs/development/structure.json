@@ -1,0 +1,337 @@
+{
+  "schemaVersion": "1.0.0",
+  "reviewedAt": "2026-10-04",
+  "scope": "documentary_design",
+  "runtimeImplementedByThisPhase": false,
+  "files": [
+    ".agents/skills/tiktok-development/SKILL.md",
+    ".agents/skills/tiktok-development/agents/openai.yaml",
+    "AGENTS.md",
+    "docs/AGENTS.md",
+    "docs/DEVELOPMENT.md",
+    "docs/design/DESIGN.md",
+    "docs/development/ADR.md",
+    "docs/development/AGENTES-CREATIVOS.md",
+    "docs/development/ARQUITECTURA.md",
+    "docs/development/AUDITORIA.md",
+    "docs/development/BACKLOG.md",
+    "docs/development/CAPACIDADES-TIKTOK.md",
+    "docs/development/CONTRATOS.md",
+    "docs/development/DISENO.md",
+    "docs/development/ESTRUCTURA.md",
+    "docs/development/FASES.md",
+    "docs/development/FUENTES.md",
+    "docs/development/MARKETING.md",
+    "docs/development/MEDIA.md",
+    "docs/development/OPERACION.md",
+    "docs/development/PIPELINE.md",
+    "docs/development/README.md",
+    "docs/development/REGLAS.md",
+    "docs/development/REPOSITORIOS.md",
+    "docs/development/SKILLS-PLUGINS.md",
+    "docs/development/VALIDACION.md",
+    "docs/development/contracts/asset.schema.json",
+    "docs/development/contracts/campaign.schema.json",
+    "docs/development/contracts/content-revision.schema.json",
+    "docs/development/contracts/publication-job.schema.json",
+    "docs/development/phases/00-foundation.md",
+    "docs/development/phases/01-developer-app.md",
+    "docs/development/phases/02-content-upload.md",
+    "docs/development/phases/03-direct-post.md",
+    "docs/development/phases/04-editorial.md",
+    "docs/development/phases/05-creative.md",
+    "docs/development/phases/06-scheduling.md",
+    "docs/development/phases/07-tiendanube.md",
+    "docs/development/phases/08-whatsapp.md",
+    "docs/development/phases/09-mcp.md",
+    "docs/development/phases/10-other-networks.md",
+    "docs/development/repositories.json",
+    "docs/development/structure.json",
+    "docs/marketing/CONTENT-STRATEGY.md",
+    "docs/media/PRODUCTION.md",
+    "docs/runbooks/EXPIRED-CONNECTION.md",
+    "docs/runbooks/UNKNOWN-TRANSFER.md",
+    "scripts/AGENTS.md",
+    "scripts/DEVELOPMENT.md",
+    "scripts/verify-documentation.mjs",
+    "src/agents/AGENTS.md",
+    "src/agents/DEVELOPMENT.md",
+    "src/analytics/AGENTS.md",
+    "src/analytics/DEVELOPMENT.md",
+    "src/config/AGENTS.md",
+    "src/config/DEVELOPMENT.md",
+    "src/content/AGENTS.md",
+    "src/content/DEVELOPMENT.md",
+    "src/content/approval/AGENTS.md",
+    "src/content/approval/DEVELOPMENT.md",
+    "src/content/editorial/AGENTS.md",
+    "src/content/editorial/DEVELOPMENT.md",
+    "src/design/AGENTS.md",
+    "src/design/DEVELOPMENT.md",
+    "src/identity/AGENTS.md",
+    "src/identity/DEVELOPMENT.md",
+    "src/integrations/AGENTS.md",
+    "src/integrations/DEVELOPMENT.md",
+    "src/marketing/AGENTS.md",
+    "src/marketing/DEVELOPMENT.md",
+    "src/mcp/AGENTS.md",
+    "src/mcp/DEVELOPMENT.md",
+    "src/media/AGENTS.md",
+    "src/media/DEVELOPMENT.md",
+    "src/review-ui/AGENTS.md",
+    "src/review-ui/DEVELOPMENT.md",
+    "src/scheduling/AGENTS.md",
+    "src/scheduling/DEVELOPMENT.md",
+    "src/tiktok/AGENTS.md",
+    "src/tiktok/DEVELOPMENT.md",
+    "tests/AGENTS.md",
+    "tests/DEVELOPMENT.md"
+  ],
+  "phases": [
+    {
+      "phase": 0,
+      "state": "Base existente; ampliaciones de operación pendientes",
+      "guide": "docs/development/phases/00-foundation.md",
+      "proposedCodeFiles": [
+        "src/identity/session.service.js",
+        "src/identity/authorization.service.js",
+        "src/core/request-context.js"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 1,
+      "state": "OAuth Sandbox validado; producción independiente",
+      "guide": "docs/development/phases/01-developer-app.md",
+      "proposedCodeFiles": [
+        "docs/evidence/login-kit.md"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 2,
+      "state": "Flujo semiautomático validado por usuario",
+      "guide": "docs/development/phases/02-content-upload.md",
+      "proposedCodeFiles": [
+        "docs/evidence/content-upload.md"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 3,
+      "state": "Diferido; deshabilitado y sin video.publish",
+      "guide": "docs/development/phases/03-direct-post.md",
+      "proposedCodeFiles": [
+        "src/tiktok/developer/direct-post/capability.js",
+        "src/tiktok/developer/direct-post/publish.service.js"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 4,
+      "state": "Schema inicial; motor pendiente",
+      "guide": "docs/development/phases/04-editorial.md",
+      "proposedCodeFiles": [
+        "src/content/editorial/revision.service.js",
+        "src/content/editorial/revision.repository.js",
+        "src/content/approval/approval.service.js",
+        "src/content/calendar/calendar.service.js"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 5,
+      "state": "Pendiente",
+      "guide": "docs/development/phases/05-creative.md",
+      "proposedCodeFiles": [
+        "src/agents/orchestrator.service.js",
+        "src/agents/prompt.registry.js",
+        "src/media/asset.service.js",
+        "src/media/render.service.js",
+        "src/media/preflight.service.js"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 6,
+      "state": "Pendiente",
+      "guide": "docs/development/phases/06-scheduling.md",
+      "proposedCodeFiles": [
+        "src/scheduling/job.repository.js",
+        "src/scheduling/outbox.dispatcher.js",
+        "src/scheduling/scheduler.service.js",
+        "src/scheduling/publication.worker.js",
+        "src/scheduling/reconciliation.service.js"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 7,
+      "state": "Adapter no configurado",
+      "guide": "docs/development/phases/07-tiendanube.md",
+      "proposedCodeFiles": [
+        "src/integrations/tiendanube/catalog.service.js",
+        "src/integrations/tiendanube/snapshot.repository.js",
+        "src/integrations/tiendanube/catalog.mapper.js"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 8,
+      "state": "Adapter no configurado",
+      "guide": "docs/development/phases/08-whatsapp.md",
+      "proposedCodeFiles": [
+        "src/integrations/whatsapp/contact-link.service.js",
+        "src/analytics/attribution.service.js"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 9,
+      "state": "Foundation only; sin servidor operativo",
+      "guide": "docs/development/phases/09-mcp.md",
+      "proposedCodeFiles": [
+        "src/mcp/server.js",
+        "src/mcp/tools/register.js",
+        "src/mcp/policies/authorization.js"
+      ],
+      "status": "planned_extensions"
+    },
+    {
+      "phase": 10,
+      "state": "Pendiente",
+      "guide": "docs/development/phases/10-other-networks.md",
+      "proposedCodeFiles": [
+        "src/providers/provider-capability.js",
+        "src/providers/provider.registry.js"
+      ],
+      "status": "planned_extensions"
+    }
+  ],
+  "modules": [
+    {
+      "path": "src/identity",
+      "rules": "src/identity/AGENTS.md",
+      "spec": "src/identity/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/content",
+      "rules": "src/content/AGENTS.md",
+      "spec": "src/content/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/content/editorial",
+      "rules": "src/content/editorial/AGENTS.md",
+      "spec": "src/content/editorial/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/content/approval",
+      "rules": "src/content/approval/AGENTS.md",
+      "spec": "src/content/approval/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/agents",
+      "rules": "src/agents/AGENTS.md",
+      "spec": "src/agents/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/design",
+      "rules": "src/design/AGENTS.md",
+      "spec": "src/design/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/media",
+      "rules": "src/media/AGENTS.md",
+      "spec": "src/media/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/marketing",
+      "rules": "src/marketing/AGENTS.md",
+      "spec": "src/marketing/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/scheduling",
+      "rules": "src/scheduling/AGENTS.md",
+      "spec": "src/scheduling/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/analytics",
+      "rules": "src/analytics/AGENTS.md",
+      "spec": "src/analytics/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/integrations",
+      "rules": "src/integrations/AGENTS.md",
+      "spec": "src/integrations/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/tiktok",
+      "rules": "src/tiktok/AGENTS.md",
+      "spec": "src/tiktok/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/mcp",
+      "rules": "src/mcp/AGENTS.md",
+      "spec": "src/mcp/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/review-ui",
+      "rules": "src/review-ui/AGENTS.md",
+      "spec": "src/review-ui/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "src/config",
+      "rules": "src/config/AGENTS.md",
+      "spec": "src/config/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "tests",
+      "rules": "tests/AGENTS.md",
+      "spec": "tests/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "scripts",
+      "rules": "scripts/AGENTS.md",
+      "spec": "scripts/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    },
+    {
+      "path": "docs",
+      "rules": "docs/AGENTS.md",
+      "spec": "docs/DEVELOPMENT.md",
+      "status": "documented_not_runtime"
+    }
+  ],
+  "linkedExistingFiles": [
+    "README.md",
+    "docs/PHASES.md",
+    "docs/ARCHITECTURE.md",
+    "docs/SECURITY.md",
+    "docs/OFFICIAL-SOURCES.md",
+    "docs/PROJECT-VALIDATION.md",
+    "package.json"
+  ],
+  "unknowns": [
+    "App Review submission/production status",
+    "Multiuser authorization",
+    "Catalog integration",
+    "Actual provider access for analytics/paid",
+    "Dependency versions/licenses at adoption"
+  ]
+}

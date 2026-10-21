@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PublicationJob",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ownerTenantRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revisionRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assetSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "targetAccountRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approvalRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": [
+        "draft_upload",
+        "future_direct_post"
+      ]
+    },
+    "scheduledAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "scheduledTimezone": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "enum": [
+        "pending",
+        "scheduled",
+        "running",
+        "awaiting_inbox",
+        "awaiting_manual_publish",
+        "published",
+        "failed",
+        "cancelled",
+        "unknown_requires_reconciliation"
+      ]
+    },
+    "providerPublishId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 64
+    },
+    "providerStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "attemptCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "ownerTenantRef",
+    "revisionRef",
+    "assetSha256",
+    "targetAccountRef",
+    "approvalRef",
+    "idempotencyKey",
+    "provider",
+    "mode",
+    "scheduledAt",
+    "scheduledTimezone",
+    "state",
+    "providerPublishId",
+    "providerStatus",
+    "evidenceRefs",
+    "attemptCount",
+    "updatedAt"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "published"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "evidenceRefs": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "scheduled"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "scheduledAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "awaiting_inbox",
+              "awaiting_manual_publish"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "providerPublishId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        }
+      }
+    }
+  ]
+}

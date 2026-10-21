@@ -30,8 +30,13 @@
 - publish status polling: implemented;
 - minimal Review UI: implemented;
 - user completion through TikTok Inbox: documented;
-- real upload validation: pending;
-- Direct Post and `video.publish`: not implemented.
+- real transfer result: successful; TikTok status `SEND_TO_USER_INBOX`;
+- previous transfer attempt: TikTok HTTP 500 x3; historical evidence;
+- Inbox confirmation: receipt manually confirmed by the user;
+- final publication: manually confirmed by the user;
+- semiautomatic upload through final publication: validated end-to-end; see `PROJECT-VALIDATION.md`;
+- App Review: in review (user-confirmed 2026-10-05); real tests deferred;
+- Direct Post and `video.publish`: disabled and not implemented.
 
 ## Phase 3 — Direct Post
 
@@ -39,12 +44,13 @@ Deferred. No `video.publish` implementation or scope request.
 
 ## Phase 4 — Editorial Engine
 
-- calendar;
-- launches;
-- important dates;
-- product triggers;
-- content briefs;
-- approval workflow.
+- first increment implemented locally: immutable in-memory revisions and tenant ownership;
+- states implemented: `draft`, `review`, `approved`;
+- server-side approval bound to actor, timestamp, content hash, asset hash, target account and `draft_upload` scope;
+- editing approved content creates a new unapproved draft revision;
+- automated tests cover validation, ownership, immutability, stale revisions and approval invalidation;
+- durable persistence, exposed CRUD, calendar, launches, important dates and product triggers: pending;
+- Phase 4 acceptance gate: not complete.
 
 ## Phase 5 — Creative Agents
 
@@ -99,3 +105,7 @@ Add network-specific adapters.
 ## Deferred
 
 TikTok Shop.
+
+## Guía documental de desarrollo
+
+La preparación documental de las siguientes fases se describe en [development/README.md](development/README.md) y [development/FASES.md](development/FASES.md). Mantiene la numeración 0–10 y los gates de cada fase. El cierre de Sandbox no equivale a aprobación de App Review o producción; los módulos nuevos siguen pendientes de implementación.

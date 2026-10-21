@@ -1,0 +1,6 @@
+interface:
+  display_name: "Desarrollo TikTok ShopinistaMeta"
+  short_description: "Fases verificables y reglas de TIKTOK-APP"
+  default_prompt: "Usa $tiktok-development para desarrollar la siguiente fase con fuentes y evidencia verificables."
+policy:
+  allow_implicit_invocation: true

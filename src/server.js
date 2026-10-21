@@ -13,6 +13,8 @@ import { errorHandler } from "./core/errors.js";
 import { tiktokAuthRouter } from "./tiktok/developer/auth/routes.js";
 import { tiktokContentRouter } from "./tiktok/developer/content/routes.js";
 
+import { createLocalEditorialRouter } from "./content/editorial/local.routes.js";
+
 validateEnvironment();
 
 const app = express();
@@ -46,6 +48,7 @@ app.get("/config/status", (req, res) => {
 
 app.use("/auth/tiktok", tiktokAuthRouter);
 app.use("/api/tiktok/content", tiktokContentRouter);
+app.use("/api/editorial", createLocalEditorialRouter());
 app.use("/review", express.static("src/review-ui/public"));
 
 app.use(errorHandler);

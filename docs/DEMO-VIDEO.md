@@ -31,4 +31,6 @@ Visible disclosure:
 
 > After upload, open TikTok Inbox to continue editing and publish.
 
-Operational recording remains pending until a real Sandbox upload succeeds.
+The real Sandbox upload, Inbox receipt, and final publication were manually
+confirmed by the user. The semiautomatic flow is validated end-to-end.
+App Review is in review, as confirmed by the user on 2026-10-05. Real provider tests are deferred; approval is not asserted.

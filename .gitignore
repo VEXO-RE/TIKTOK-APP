@@ -21,3 +21,6 @@ build/
 
 .vscode/settings.json
 .idea/
+
+# Portable media tools (local binaries, not project source)
+/tools/ffmpeg/

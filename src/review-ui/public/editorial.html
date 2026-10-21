@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Editorial local · ShopinistaMeta</title>
+<style>
+:root{color-scheme:light}*{box-sizing:border-box}body{font:16px/1.55 system-ui,sans-serif;margin:0;background:#f3f5f6;color:#172326}
+main{max-width:1040px;margin:auto;padding:28px 20px}h1{font-size:clamp(26px,4vw,40px);line-height:1.15}h2{font-size:22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}section{background:white;border:1px solid #d3dadd;border-radius:16px;padding:24px;margin-bottom:20px}
+label{display:block;margin:14px 0 6px}input:not([type=checkbox]),textarea{width:100%;padding:11px;border:1px solid #7a898c;border-radius:7px;font:inherit}
+textarea{min-height:100px}button,.button{display:inline-block;padding:11px 17px;background:#164f46;color:white;border:0;border-radius:8px;font:inherit;cursor:pointer;margin:8px 6px 8px 0}
+button:disabled{background:#d4dcda;color:#43514e;cursor:not-allowed}:focus-visible{outline:3px solid #a94700;outline-offset:3px}
+.notice{padding:14px;border-left:4px solid #a94700;background:#fff4e8}.muted{color:#49585b}video{width:100%;max-height:400px;background:#111;border-radius:8px}
+#result{white-space:pre-wrap}ul{padding-left:20px}@media(max-width:720px){.grid{grid-template-columns:1fr}section{padding:18px}}
+summary{cursor:pointer;font-weight:600;padding:12px 0}details{border-top:1px solid #d3dadd;margin-top:16px}select{width:100%;padding:10px;border:1px solid #7a898c;border-radius:7px;font:inherit}#ed-download[hidden]{display:none}
+</style></head>
+<body><main>
+<p class="muted">ShopinistaMeta · entorno local de pruebas</p><h1>Prepara, revisa y envía tu video</h1>
+<p><a href="brief.html">Preparar brief y guion sin conectar TikTok</a></p>
+<p class="notice">El envío crea un borrador en TikTok Inbox. Completa la edición y publicación en TikTok. Los datos de este entorno se pierden al reiniciar el servidor.</p>
+<section><h2>1. Cuenta destino</h2><p id="connection" role="status">Comprobando conexión…</p>
+<a class="button" href="/auth/tiktok" target="tiktok-connect">Conectar TikTok</a><button id="refresh" type="button">Actualizar conexión</button></section>
+<div class="grid">
+<section><h2>2. Contenido editorial</h2><form id="draft-form">
+<label for="title">Título interno</label><input id="title" required maxlength="200">
+<label for="copy">Texto para copiar al publicar en TikTok</label><textarea id="copy" maxlength="5000"></textarea>
+<p class="muted">El texto se guarda para tu revisión; este flujo de video no lo envía como descripción a TikTok.</p>
+<label for="sources">Fuentes o referencias del contenido (una por línea)</label><textarea id="sources" required placeholder="Referencia a tu brief, producto o documento real"></textarea>
+<details><summary>Cargar producto desde Tiendanube</summary><p class="muted">Solo consulta catálogo autorizado. Elegir un producto no publica ni modifica Tiendanube.</p>
+<button id="tn-categories" type="button">Cargar categorías</button><button id="tn-categories-prev" type="button" disabled>Anterior</button><button id="tn-categories-next" type="button" disabled>Siguiente</button><label for="tn-category">Categoría</label><select id="tn-category"><option value="">Todas</option></select>
+<label for="tn-search">Buscar producto</label><input id="tn-search" maxlength="120" placeholder="Nombre, etiqueta o SKU"><button id="tn-products" type="button">Cargar productos</button><button id="tn-products-prev" type="button" disabled>Anterior</button><button id="tn-products-next" type="button" disabled>Siguiente</button>
+<label for="tn-product">Producto</label><select id="tn-product"><option value="">Primero carga productos</option></select><button id="tn-use-product" type="button" disabled>Usar como referencia</button><p id="tn-product-detail" class="muted" role="status"></p><p id="tn-status" class="muted" role="status"></p></details>
+<button id="create" type="submit" disabled>Guardar borrador</button><button id="new-draft" type="button">Nuevo borrador</button></form>
+<p id="draft-state" role="status">Todavía no hay un borrador seleccionado.</p>
+<label for="video">Selecciona el video</label><input id="video" type="file" accept="video/mp4,video/quicktime,video/webm" disabled>
+</section>
+<section><h2>3. Revisión y aprobación</h2><video id="preview" controls playsinline preload="auto" hidden></video>
+<p id="preview-state" role="status">Guarda el contenido y selecciona un video para revisarlo.</p>
+<label><input id="confirm" type="checkbox" disabled> Revisé este contenido y video para la cuenta indicada. Apruebo enviarlo a Inbox y publicar manualmente en TikTok.</label>
+<button id="approve" disabled>Aprobar revisión</button><button id="send" disabled>Enviar a TikTok Inbox</button>
+<button id="check" disabled>Consultar estado del envío</button><button id="archive" type="button" disabled>Archivar aprobado</button>
+<p id="result" role="status" aria-live="polite"></p></section></div>
+<section id="editor-panel"><h2>Editor de video, audio y plantillas</h2>
+<p id="editor-tools" role="status">Comprobando herramientas de exportación…</p>
+<button id="ed-analyze" type="button" disabled>Analizar video</button><button id="ed-preflight" type="button" disabled>Revisar preparación</button><p id="ed-analysis" class="muted" role="status">El análisis revisa formato, duración y audio; no reconoce productos dentro del video.</p><p id="ed-preflight-result" class="muted" role="status">La revisión técnica local no confirma que TikTok acepte o publique el video.</p>
+<p class="muted">Trabaja desde el original. Los textos y subtítulos se incrustan en el MP4; los cambios requieren exportar y aprobar otra vez.</p>
+<div class="grid">
+<div><label for="ed-template">Plantilla de textos</label><select id="ed-template"><option value="clean">Limpia</option><option value="editorial">Editorial con fondo</option><option value="contrast">Alto contraste</option></select>
+<label for="ed-preset-name">Nombre de plantilla propia</label><input id="ed-preset-name" maxlength="60"><button id="ed-save-preset" type="button">Guardar plantilla</button><label for="ed-saved-preset">Mis plantillas (en este navegador)</label><select id="ed-saved-preset"></select><button id="ed-apply-preset" type="button">Aplicar plantilla</button>
+<label for="ed-format">Formato</label><select id="ed-format"><option value="vertical">Vertical 9:16</option><option value="square">Cuadrado 1:1</option><option value="landscape">Horizontal 16:9</option><option value="original">Formato original</option></select>
+<label for="ed-fit">Encuadre</label><select id="ed-fit"><option value="contain">Mostrar completo con fondo</option><option value="cover">Recortar para llenar</option></select>
+<label for="ed-resolution">Resolución</label><select id="ed-resolution"><option value="720">720</option><option value="1080">1080</option></select>
+<label for="ed-start">Recorte: inicio (segundos)</label><input id="ed-start" type="number" min="0" max="600" step=".1" value="0">
+<label for="ed-end">Recorte: fin (vacío conserva el final)</label><input id="ed-end" type="number" min=".1" max="600" step=".1">
+<label for="ed-speed">Velocidad</label><select id="ed-speed"><option value=".5">0.5×</option><option value=".75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+<details><summary>Color, rotación y fundidos</summary><label for="ed-rotate">Rotación</label><select id="ed-rotate"><option value="0">Sin rotación</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select>
+<label><input id="ed-flip" type="checkbox"> Efecto espejo</label>
+<label for="ed-brightness">Brillo (−0.3 a 0.3)</label><input id="ed-brightness" type="number" min="-.3" max=".3" step=".05" value="0">
+<label for="ed-contrast">Contraste</label><input id="ed-contrast" type="number" min=".5" max="2" step=".1" value="1">
+<label for="ed-saturation">Saturación</label><input id="ed-saturation" type="number" min="0" max="2" step=".1" value="1">
+<label for="ed-fade">Entrada/salida con fundido (segundos)</label><input id="ed-fade" type="number" min="0" max="3" step=".1" value="0"></details></div>
+<div><label for="ed-original-volume">Volumen original (0 silencia, 1 normal)</label><input id="ed-original-volume" type="number" min="0" max="2" step=".1" value="1">
+<label for="ed-music">Música propia o licenciada</label><input id="ed-music" type="file" accept="audio/*">
+<label for="ed-music-volume">Volumen de música</label><input id="ed-music-volume" type="number" min="0" max="2" step=".05" value=".25">
+<label for="ed-music-start">Recortar audio de música desde (segundos)</label><input id="ed-music-start" type="number" min="0" max="600" value="0">
+<label for="ed-music-offset">Música comienza en el video (segundos)</label><input id="ed-music-offset" type="number" min="0" max="180" value="0">
+<label for="ed-voice">Voz o narración</label><input id="ed-voice" type="file" accept="audio/*">
+<button id="ed-record" type="button">Grabar mi voz</button><button id="ed-stop" type="button" disabled>Terminar grabación</button>
+<label for="ed-voice-volume">Volumen de voz</label><input id="ed-voice-volume" type="number" min="0" max="2" step=".1" value="1">
+<label for="ed-voice-start">Recortar voz desde (segundos)</label><input id="ed-voice-start" type="number" min="0" max="600" value="0">
+<label for="ed-voice-offset">Voz comienza en el video (segundos)</label><input id="ed-voice-offset" type="number" min="0" max="180" value="0">
+<details><summary>Imagen o logo propio</summary><label for="ed-image">Imagen o logo propio (PNG/JPEG)</label><input id="ed-image" type="file" accept="image/png,image/jpeg">
+<label for="ed-image-position">Posición de imagen</label><select id="ed-image-position"><option value="top">Arriba</option><option value="center">Centro</option><option value="bottom">Abajo</option></select>
+<label for="ed-image-width">Ancho de imagen (fracción del video)</label><input id="ed-image-width" type="number" min=".05" max=".5" step=".05" value=".2"></details>
+<button id="ed-remove-music" type="button">Quitar música</button><button id="ed-remove-voice" type="button">Quitar voz</button><button id="ed-remove-image" type="button">Quitar imagen</button>
+<p id="ed-assets" role="status">Sin pistas adicionales.</p>
+</div></div>
+<label for="ed-overlays">Textos en pantalla: una línea por capa, inicio | fin | texto</label><textarea id="ed-overlays" placeholder="0 | 5 | Tu texto real"></textarea>
+<button id="ed-use-title" type="button">Usar título como texto</button>
+<label for="ed-position">Posición de textos</label><select id="ed-position"><option value="bottom">Abajo</option><option value="top">Arriba</option><option value="center">Centro</option></select>
+<label for="ed-font">Tamaño de texto (a resolución 720)</label><input id="ed-font" type="number" min="16" max="96" value="32">
+<label for="ed-color">Color del texto</label><input id="ed-color" type="color" value="#ffffff">
+<label for="ed-srt">Importar subtítulos SRT</label><input id="ed-srt" type="file" accept=".srt,text/plain">
+<label for="ed-subtitles">Subtítulos editables: inicio | fin | texto</label><textarea id="ed-subtitles"></textarea>
+<p class="muted">Los tiempos de texto, voz y subtítulos corresponden al resultado editado. No hay transcripción automática.</p>
+<label for="ed-rights">Derechos de los archivos seleccionados</label><select id="ed-rights"><option value="owned">Son propios</option><option value="licensed">Tengo licencia de uso</option></select>
+<label for="ed-evidence">Referencia de autoría o licencia</label><input id="ed-evidence" maxlength="500" required placeholder="Archivo propio, documento o enlace real de licencia">
+<button id="ed-render" type="button" disabled>Exportar y previsualizar MP4</button>
+<button id="ed-restore" type="button" disabled>Volver al video original</button>
+<a id="ed-download" class="button" hidden>Descargar MP4</a>
+<button id="ed-copy" type="button">Copiar texto para TikTok</button>
+<p id="ed-result" role="status" aria-live="polite">La exportación no envía nada a TikTok.</p>
+</section>
+<section><h2>4. Calendario editorial</h2><p class="muted">Reserva una fecha para una revisión aprobada. No ejecuta envíos automáticos.</p>
+<form id="plan-form"><label for="scheduled">Fecha y hora previstas (UTC)</label><input id="scheduled" type="datetime-local" required>
+<label for="expires">Fecha y hora límite del plan (UTC)</label><input id="expires" type="datetime-local" required>
+<button id="plan" disabled>Reservar fecha</button></form><ul id="plans"></ul></section>
+<section><h2>Borradores de esta sesión</h2><p>Para ajustar el texto o el video después de un envío, crea otro borrador. Un intento incierto requiere conciliación antes de repetir.</p><ul id="drafts"></ul></section>
+</main><script src="editorial.js" defer></script><script src="editor.js" defer></script></body></html>

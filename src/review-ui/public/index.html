@@ -19,6 +19,7 @@
 <body>
   <main>
     <h1>TikTok Sandbox Review</h1>
+    <p><a href="/review/editorial.html">Abrir flujo editorial local con aprobación del servidor</a></p>
     <section>
       <h2>1. Connect TikTok</h2>
       <a class="button" href="/auth/tiktok" target="tiktok-connect">Connect TikTok</a>
@@ -27,8 +28,11 @@
     <section>
       <h2>2. Upload draft</h2>
       <form id="upload-form">
-        <input name="video" type="file" accept="video/mp4,video/quicktime,video/webm" required>
-        <button type="submit">Upload draft to TikTok</button>
+        <label>Select a video <input id="video-file" name="video" type="file" accept="video/mp4,video/quicktime,video/webm" required></label>
+        <video id="video-preview" controls playsinline preload="metadata" hidden style="max-width: 100%; margin: 1rem 0;"></video>
+        <p id="preview-message" aria-live="polite">Select a video to preview it before uploading.</p>
+        <label><input id="video-approval" type="checkbox" required disabled> I reviewed this video and approve uploading it as a draft to TikTok. I will complete publication in TikTok Inbox.</label>
+        <p><button id="upload-button" type="submit" disabled>Approve and upload draft to TikTok</button></p>
       </form>
       <output id="upload-result" aria-live="polite"></output>
     </section>
@@ -47,6 +51,60 @@
     const uploadResult = document.querySelector("#upload-result");
     const statusResult = document.querySelector("#status-result");
     const publishId = document.querySelector("#publish-id");
+    const videoFile = document.querySelector("#video-file");
+    const preview = document.querySelector("#video-preview");
+    const previewMessage = document.querySelector("#preview-message");
+    const approval = document.querySelector("#video-approval");
+    const uploadButton = document.querySelector("#upload-button");
+    let previewUrl;
+    let previewReady = false;
+    let uploading = false;
+
+    function updateUploadButton() {
+      uploadButton.disabled = uploading || !previewReady || !approval.checked;
+    }
+
+    videoFile.addEventListener("change", () => {
+      approval.checked = false;
+      approval.disabled = true;
+      previewReady = false;
+      publishId.value = "";
+      statusResult.textContent = "";
+      uploadResult.textContent = "";
+      preview.pause();
+      preview.removeAttribute("src");
+      preview.load();
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      previewUrl = undefined;
+      preview.hidden = true;
+      const file = videoFile.files[0];
+      previewMessage.textContent = "Select a video to preview it before uploading.";
+      if (file) {
+        previewMessage.textContent = "Loading local preview…";
+        previewUrl = URL.createObjectURL(file);
+        preview.src = previewUrl;
+        preview.hidden = false;
+      }
+      updateUploadButton();
+    });
+
+    preview.addEventListener("loadeddata", () => {
+      if (!previewUrl || preview.currentSrc !== previewUrl) return;
+      previewReady = true;
+      approval.disabled = uploading;
+      previewMessage.textContent = "Review the video, then approve uploading the draft. No video has been sent yet.";
+      updateUploadButton();
+    });
+
+    preview.addEventListener("error", () => {
+      if (!previewUrl) return;
+      previewReady = false;
+      approval.checked = false;
+      approval.disabled = true;
+      previewMessage.textContent = "This browser cannot preview the video. Select a playable video before approving.";
+      updateUploadButton();
+    });
+    approval.addEventListener("change", updateUploadButton);
 
     async function refreshConnection() {
       const response = await fetch("/api/tiktok/content/connection");
@@ -58,10 +116,19 @@
 
     document.querySelector("#upload-form").addEventListener("submit", async event => {
       event.preventDefault();
+      if (uploading || !previewReady || !approval.checked || !videoFile.files[0]) return;
+      const uploadData = new FormData(event.currentTarget);
+      uploading = true;
+      videoFile.disabled = true;
+      approval.disabled = true;
+      updateUploadButton();
+      publishId.value = "";
+      statusResult.textContent = "";
       uploadResult.textContent = "Uploading…";
+      try {
       const response = await fetch("/api/tiktok/content/upload", {
         method: "POST",
-        body: new FormData(event.currentTarget)
+        body: uploadData
       });
       const body = await response.json();
       if (!response.ok) {
@@ -70,6 +137,15 @@
       }
       publishId.value = body.publishId;
       uploadResult.textContent = `publish_id: ${body.publishId}\n${body.nextStep}`;
+      } catch {
+        uploadResult.textContent = "The upload result could not be confirmed. Check TikTok Inbox before approving another attempt.";
+      } finally {
+        uploading = false;
+        videoFile.disabled = false;
+        approval.checked = false;
+        approval.disabled = !previewReady;
+        updateUploadButton();
+      }
     });
 
     document.querySelector("#status-form").addEventListener("submit", async event => {

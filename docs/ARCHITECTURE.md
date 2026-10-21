@@ -55,3 +55,7 @@ TikTok will be the first platform adapter.
 
 This prevents future Instagram, Facebook, YouTube, Pinterest or other
 integrations from duplicating the content engine.
+
+## Arquitectura propuesta para las fases siguientes
+
+Consultar [development/ARQUITECTURA.md](development/ARQUITECTURA.md) y [development/ADR.md](development/ADR.md). Describe revisiones, aprobación, outbox, workers y límites por cuenta. Son propuestas documentales; no migran el servidor actual.

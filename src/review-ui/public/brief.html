@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Brief local · ShopinistaMeta</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f3f5f6;color:#172326;font:16px/1.55 system-ui}main{max-width:1000px;margin:auto;padding:24px}section{padding:24px;background:white;border:1px solid #d3dadd;border-radius:16px;margin:20px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}label{display:block;margin-top:14px}input:not([type=checkbox]),textarea{width:100%;font:inherit;padding:10px;border:1px solid #7a898c;border-radius:7px}button,a.button{display:inline-block;background:#164f46;color:white;padding:12px;border:0;border-radius:8px;margin:12px 8px 0 0;font:inherit;cursor:pointer}button:disabled{opacity:.5}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}.notice{border-left:4px solid #a94700;padding:12px;background:#fff4e8}:focus-visible{outline:3px solid #a94700}@media(max-width:700px){.grid{grid-template-columns:1fr}main{padding:16px}section{padding:16px}}</style></head>
+<body><main><p>ShopinistaMeta · preparación local</p><h1>Prepara tu producto y su guion</h1>
+<p class="notice">Puedes trabajar aquí sin conectar TikTok. Esta herramienta prepara un borrador con los datos que confirmes; no verifica catálogo, no publica y no llama a proveedores.</p>
+<div class="grid"><section><h2>Datos del producto</h2><form id="brief-form">
+<label for="name">Nombre real del producto</label><input id="name" maxlength="100" required>
+<label for="quantity">Cantidad incluida en el contenido (no stock)</label><input id="quantity" type="number" min="1" max="100" value="1" required>
+<label for="color">Color confirmado (opcional)</label><input id="color" maxlength="40">
+<label for="style">Estilo confirmado (opcional)</label><input id="style" maxlength="40">
+<label for="sourceRef">Fuente: ficha, enlace o documento real</label><input id="sourceRef" maxlength="500" required>
+<label for="observedAt">Fecha de consulta de la fuente</label><input id="observedAt" type="date" required>
+<label><input id="confirmed" type="checkbox" required> Revisé estos datos contra la fuente. La cantidad no representa disponibilidad.</label>
+<button type="submit">Preparar guion</button></form><p id="status" role="status" aria-live="polite"></p></section>
+<section><h2>Guion para revisar</h2><pre id="output">Completa los datos para preparar un borrador.</pre>
+<button id="copy-brief" disabled>Copiar paquete</button><button id="copy-overlays" disabled>Copiar textos del video</button><button id="download" disabled>Descargar borrador</button>
+<p>No se aprueba contenido desde esta pantalla. Revisa fuentes, imágenes, sonido y texto antes de usarlo.</p></section></div>
+<section><h2>Biblioteca de este navegador</h2><p>Hasta veinte briefs. Los datos quedan en este navegador; descarga una copia para conservarlos fuera de él. Recuperar exige volver a revisar y confirmar.</p><button id="save-brief" disabled>Guardar en biblioteca</button><label for="saved-briefs">Brief guardado</label><select id="saved-briefs"></select><button id="load-brief">Recuperar datos</button><label for="import-brief">Importar borrador descargado (JSON)</label><input id="import-brief" type="file" accept="application/json,.json"><p id="library-status" role="status"></p></section><a class="button" href="campaign.html">Organizar campaña con briefs guardados</a><a class="button" href="editorial.html">Abrir editor y revisión</a><p>El editor conectado mantiene su requisito de cuenta TikTok. Sus pruebas reales quedan pendientes mientras la app está en revisión.</p>
+</main><script type="module" src="brief.js"></script></body></html>

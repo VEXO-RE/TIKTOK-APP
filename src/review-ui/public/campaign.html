@@ -1,0 +1,25 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Campañas locales · ShopinistaMeta</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f3f5f6;color:#172326;font:16px/1.55 system-ui}main{max-width:1000px;margin:auto;padding:24px}section{padding:24px;background:white;border:1px solid #d3dadd;border-radius:16px;margin:20px 0}label{display:block;margin-top:14px}input:not([type=checkbox]),textarea,select{width:100%;font:inherit;padding:10px;border:1px solid #7a898c;border-radius:7px}button,a.button{display:inline-block;background:#164f46;color:white;padding:12px;border:0;border-radius:8px;margin:12px 8px 0 0;font:inherit;cursor:pointer}button:disabled{opacity:.5}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}.notice{border-left:4px solid #a94700;padding:12px;background:#fff4e8}fieldset{margin:16px 0;border:1px solid #d3dadd;border-radius:8px}legend{overflow-wrap:anywhere;max-width:100%}:focus-visible{outline:3px solid #a94700}@media(max-width:700px){main{padding:16px}section{padding:16px}}</style></head>
+<body><main><p>ShopinistaMeta · planificación local</p><h1>Organiza tu campaña orgánica</h1>
+<p class="notice">Trabaja sin conectar TikTok. Las fechas son propuestas: esta pantalla no programa envíos, anuncios ni publicaciones. Los resultados permanecen sin medir.</p>
+<section><h2>1. Estrategia y fuentes</h2><form id="campaign-form">
+<label for="name">Nombre de campaña</label><input id="name" maxlength="120" required>
+<label for="goal">Objetivo</label><select id="goal"><option value="awareness">Descubrimiento</option><option value="consideration">Consideración</option><option value="enquiries">Consultas</option></select>
+<label for="audience">Audiencia propuesta</label><textarea id="audience" maxlength="500" required></textarea>
+<label for="audienceSource">Fuente o investigación de audiencia</label><input id="audienceSource" maxlength="500" required>
+<label for="hypothesis">Hipótesis a comprobar (sin promesas de resultado)</label><textarea id="hypothesis" maxlength="500" required></textarea>
+<label for="primaryMetric">Métrica que se propone medir después</label><input id="primaryMetric" maxlength="120" required>
+<label for="startDate">Inicio del rango (fecha UTC)</label><input id="startDate" type="date" required>
+<label for="endDate">Fin del rango (fecha UTC)</label><input id="endDate" type="date" required>
+<label for="timeZone">Zona de referencia</label><input id="timeZone" maxlength="100" value="America/Mexico_City" required>
+<p>Las horas de las piezas se ingresan en UTC; esta zona se conserva como referencia y no convierte la hora ingresada.</p>
+<label for="destination">Destino real declarado (HTTPS, opcional)</label><input id="destination" type="url" maxlength="500">
+<h2>2. Piezas de la biblioteca</h2><p>Selecciona briefs guardados, etapa del embudo y fecha UTC de cada pieza. Se conservará una copia de sus datos y fuentes. Esto no los aprueba.</p>
+<div id="brief-items"></div><p id="brief-status" role="status"></p>
+<button type="submit">Preparar campaña</button></form><p id="status" role="status" aria-live="polite"></p></section>
+<section><h2>3. Revisión del plan</h2><pre id="output">Completa la estrategia y selecciona piezas.</pre>
+<button id="save" disabled>Guardar campaña local</button><button id="download" disabled>Descargar plan</button>
+<p>La biblioteca conserva hasta diez campañas en este navegador. Descarga una copia; borrar datos del navegador elimina la biblioteca. No guarda videos ni tokens.</p></section>
+<section><h2>Campañas guardadas</h2><label for="saved">Campaña</label><select id="saved"></select><button id="show">Ver plan guardado</button></section>
+<a class="button" href="brief.html">Preparar y guardar briefs</a><a class="button" href="editorial.html">Editor y revisión</a>
+</main><script type="module" src="campaign.js"></script></body></html>

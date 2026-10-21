@@ -1,4 +1,5 @@
 import { AppError } from "../../../core/errors.js";
+import { logger } from "../../../core/logger.js";
 
 export const TIKTOK_UPLOAD_INIT_URL =
   "https://open.tiktokapis.com/v2/post/publish/inbox/video/init/";
@@ -104,35 +105,99 @@ export async function putVideo({
   uploadUrl,
   buffer,
   contentType,
-  fetchFn = globalThis.fetch
+  fetchFn = globalThis.fetch,
+  sleepFn = delayMs => new Promise(resolve => setTimeout(resolve, delayMs)),
+  logRejectedAttempt = diagnostics => {
+    logger.warn("tiktok_video_transfer_rejected", diagnostics);
+  }
 }) {
   const size = buffer.length;
-  let response;
+  const headers = {
+    "content-type": contentType,
+    "content-length": String(size),
+    "content-range": `bytes 0-${size - 1}/${size}`
+  };
 
-  try {
-    response = await fetchFn(uploadUrl, {
-      method: "PUT",
-      headers: {
-        "content-type": contentType,
-        "content-length": String(size),
-        "content-range": `bytes 0-${size - 1}/${size}`
-      },
-      body: buffer
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    let response;
+
+    try {
+      response = await fetchFn(uploadUrl, {
+        method: "PUT",
+        headers,
+        body: buffer
+      });
+    } catch {
+      throw new AppError(
+        "TikTok video transfer could not be completed.",
+        502,
+        "TIKTOK_VIDEO_TRANSFER_FAILED"
+      );
+    }
+
+    if (response.status === 201) {
+      return;
+    }
+
+    let providerErrorCode;
+
+    try {
+      const payload = await response.clone().json();
+      const candidate = payload?.error?.code ?? payload?.code ?? payload?.error;
+
+      if (
+        typeof candidate === "string" &&
+        /^[A-Za-z0-9_.:-]{1,100}$/.test(candidate)
+      ) {
+        providerErrorCode = candidate;
+      }
+    } catch {
+      providerErrorCode = undefined;
+    }
+
+    const responseContentRange = response.headers.get("content-range");
+    const safeContentRange =
+      typeof responseContentRange === "string" &&
+      /^bytes\s+\d+-\d+\/\d+$/i.test(responseContentRange)
+        ? responseContentRange
+        : undefined;
+    const safeStatusText =
+      typeof response.statusText === "string" &&
+      /^[A-Za-z0-9 ._():-]{0,100}$/.test(response.statusText)
+        ? response.statusText
+        : "";
+    const transferDiagnostics = {
+      attempt,
+      httpStatus: response.status,
+      statusText: safeStatusText,
+      ...(safeContentRange
+        ? { responseContentRange: safeContentRange }
+        : {}),
+      ...(providerErrorCode
+        ? { providerErrorCode }
+        : {})
+    };
+
+    logRejectedAttempt({
+      attempt,
+      httpStatus: response.status,
+      statusText: safeStatusText
     });
-  } catch {
-    throw new AppError(
-      "TikTok video transfer could not be completed.",
-      502,
-      "TIKTOK_VIDEO_TRANSFER_FAILED"
-    );
-  }
 
-  if (response.status !== 201) {
-    throw new AppError(
+    if (response.status >= 500 && response.status <= 599 && attempt < 3) {
+      await sleepFn(attempt * 500);
+      continue;
+    }
+
+    const error = new AppError(
       "TikTok video transfer was rejected.",
       502,
       "TIKTOK_VIDEO_TRANSFER_REJECTED"
     );
+
+    error.transferDiagnostics = transferDiagnostics;
+
+    throw error;
   }
 }
 

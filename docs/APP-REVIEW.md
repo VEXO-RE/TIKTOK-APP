@@ -43,5 +43,5 @@ Request only what the current working integration requires.
 - Show the user completing publication inside TikTok.
 
 Do not describe Upload to TikTok as automatic publication or Direct Post.
-App Review has not been submitted or approved, and Production access is
+App Review is in review (user-confirmed 2026-10-05), not asserted as approved, and Production access is
 not asserted.

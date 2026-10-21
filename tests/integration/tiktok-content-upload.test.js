@@ -143,6 +143,32 @@ test("initialization maps the official single-chunk FILE_UPLOAD request", async 
   assert.equal(result.publishId, "v_inbox_file~v2.test");
 });
 
+test("44,976-byte video initializes as one whole-file chunk", async () => {
+  let request;
+
+  await initializeVideoUpload({
+    accessToken: "opaque-access-value",
+    videoSize: 44976,
+    fetchFn: async (url, options) => {
+      request = { url, options };
+      return Response.json({
+        data: {
+          publish_id: "v_inbox_file~v2.44976",
+          upload_url: "https://open-upload.tiktokapis.com/video/?opaque=value"
+        },
+        error: { code: "ok", message: "", log_id: "log" }
+      });
+    }
+  });
+
+  assert.deepEqual(JSON.parse(request.options.body).source_info, {
+    source: "FILE_UPLOAD",
+    video_size: 44976,
+    chunk_size: 44976,
+    total_chunk_count: 1
+  });
+});
+
 test("TikTok initialization errors are sanitized", async () => {
   await assert.rejects(
     initializeVideoUpload({
@@ -203,6 +229,179 @@ test("PUT uses the complete upload URL and required headers", async () => {
   );
   assert.equal(request.options.body, buffer);
 });
+
+test("44,976-byte PUT sends the Buffer directly with exact headers", async () => {
+  let request;
+  const buffer = Buffer.alloc(44976, 1);
+
+  await putVideo({
+    uploadUrl: "https://open-upload.tiktokapis.com/video/?opaque=value",
+    buffer,
+    contentType: "video/mp4",
+    fetchFn: async (url, options) => {
+      request = { url, options };
+      return new Response(null, { status: 201, statusText: "Created" });
+    }
+  });
+
+  assert.equal(request.options.headers["content-type"], "video/mp4");
+  assert.equal(request.options.headers["content-length"], "44976");
+  assert.equal(
+    request.options.headers["content-range"],
+    "bytes 0-44975/44976"
+  );
+  assert.equal(Buffer.isBuffer(request.options.body), true);
+  assert.equal(request.options.body, buffer);
+  assert.equal(request.options.body.length, 44976);
+});
+
+test("transfer rejection preserves only safe PUT response diagnostics", async () => {
+  await assert.rejects(
+    putVideo({
+      uploadUrl: "https://open-upload.tiktokapis.com/video/?opaque=hidden",
+      buffer: Buffer.alloc(44976, 1),
+      contentType: "video/mp4",
+      fetchFn: async () => new Response(JSON.stringify({
+        error: { code: "range_not_satisfiable" },
+        upload_token: "must-not-escape"
+      }), {
+        status: 416,
+        statusText: "Requested Range Not Satisfiable",
+        headers: {
+          "content-type": "application/json",
+          "content-range": "bytes 0-1023/44976"
+        }
+      }),
+      logRejectedAttempt: () => {}
+    }),
+    error => {
+      assert.equal(error.code, "TIKTOK_VIDEO_TRANSFER_REJECTED");
+      assert.deepEqual(error.transferDiagnostics, {
+        attempt: 1,
+        httpStatus: 416,
+        statusText: "Requested Range Not Satisfiable",
+        responseContentRange: "bytes 0-1023/44976",
+        providerErrorCode: "range_not_satisfiable"
+      });
+      assert.doesNotMatch(
+        JSON.stringify(error.transferDiagnostics),
+        /must-not-escape|opaque|upload_token/
+      );
+      return true;
+    }
+  );
+});
+
+test("PUT retries two 500 responses and succeeds on the third attempt", async () => {
+  const buffer = Buffer.alloc(44976, 1);
+  const uploadUrl = "https://open-upload.tiktokapis.com/video/?opaque=value";
+  const requests = [];
+  const delays = [];
+  const diagnostics = [];
+  const statuses = [500, 500, 201];
+
+  await putVideo({
+    uploadUrl,
+    buffer,
+    contentType: "video/mp4",
+    fetchFn: async (url, options) => {
+      requests.push({ url, options });
+      const status = statuses.shift();
+      return new Response(null, {
+        status,
+        statusText: status === 201 ? "Created" : "Internal Server Error"
+      });
+    },
+    sleepFn: async delayMs => {
+      delays.push(delayMs);
+    },
+    logRejectedAttempt: entry => {
+      diagnostics.push(entry);
+    }
+  });
+
+  assert.equal(requests.length, 3);
+  assert.deepEqual(delays, [500, 1000]);
+  assert.deepEqual(diagnostics, [
+    { attempt: 1, httpStatus: 500, statusText: "Internal Server Error" },
+    { attempt: 2, httpStatus: 500, statusText: "Internal Server Error" }
+  ]);
+
+  for (const request of requests) {
+    assert.equal(request.url, uploadUrl);
+    assert.equal(request.options.body, buffer);
+    assert.equal(request.options.headers, requests[0].options.headers);
+    assert.deepEqual(request.options.headers, {
+      "content-type": "video/mp4",
+      "content-length": "44976",
+      "content-range": "bytes 0-44975/44976"
+    });
+  }
+});
+
+test("PUT fails after three 500 responses", async () => {
+  const attempts = [];
+  const delays = [];
+
+  await assert.rejects(
+    putVideo({
+      uploadUrl: "https://open-upload.tiktokapis.com/video/?opaque=value",
+      buffer: Buffer.alloc(44976, 1),
+      contentType: "video/mp4",
+      fetchFn: async () => new Response(null, {
+        status: 500,
+        statusText: "Internal Server Error"
+      }),
+      sleepFn: async delayMs => {
+        delays.push(delayMs);
+      },
+      logRejectedAttempt: entry => {
+        attempts.push(entry);
+      }
+    }),
+    error => {
+      assert.equal(error.code, "TIKTOK_VIDEO_TRANSFER_REJECTED");
+      assert.equal(error.transferDiagnostics.attempt, 3);
+      assert.equal(error.transferDiagnostics.httpStatus, 500);
+      return true;
+    }
+  );
+
+  assert.deepEqual(attempts.map(entry => entry.attempt), [1, 2, 3]);
+  assert.deepEqual(delays, [500, 1000]);
+});
+
+for (const status of [400, 416]) {
+  test(`PUT does not retry HTTP ${status}`, async () => {
+    let requestCount = 0;
+    const delays = [];
+
+    await assert.rejects(
+      putVideo({
+        uploadUrl: "https://open-upload.tiktokapis.com/video/?opaque=value",
+        buffer: Buffer.alloc(44976, 1),
+        contentType: "video/mp4",
+        fetchFn: async () => {
+          requestCount += 1;
+          return new Response(null, { status });
+        },
+        sleepFn: async delayMs => {
+          delays.push(delayMs);
+        },
+        logRejectedAttempt: () => {}
+      }),
+      error => {
+        assert.equal(error.code, "TIKTOK_VIDEO_TRANSFER_REJECTED");
+        assert.equal(error.transferDiagnostics.httpStatus, status);
+        assert.equal(error.transferDiagnostics.attempt, 1);
+        return true;
+      }
+    );
+
+    assert.equal(requestCount, 1);
+    assert.deepEqual(delays, []);
+  });
+}
 
 test("successful upload returns publishId without token or upload URL", async () => {
   const form = new FormData();

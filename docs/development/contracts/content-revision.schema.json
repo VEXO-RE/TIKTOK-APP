@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ContentRevision",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ownerTenantRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "targetAccountRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "copy": {
+      "type": "string"
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "assetRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "contentSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "state": {
+      "enum": [
+        "idea",
+        "draft",
+        "review",
+        "approved",
+        "archived"
+      ]
+    },
+    "approval": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "title": "Approval snapshot",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "actorRef": {
+              "type": "string",
+              "minLength": 1
+            },
+            "approvedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "contentSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "assetSha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "targetAccountRef": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scope": {
+              "enum": [
+                "draft_upload",
+                "future_direct_post"
+              ]
+            }
+          },
+          "required": [
+            "actorRef",
+            "approvedAt",
+            "contentSha256",
+            "assetSha256",
+            "targetAccountRef",
+            "scope"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "ownerTenantRef",
+    "revision",
+    "targetAccountRef",
+    "title",
+    "copy",
+    "sourceRefs",
+    "assetRefs",
+    "contentSha256",
+    "state",
+    "approval"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "approved"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "approval": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Approval snapshot",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "actorRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "approvedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "contentSha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "assetSha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "targetAccountRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "enum": [
+                  "draft_upload",
+                  "future_direct_post"
+                ]
+              }
+            },
+            "required": [
+              "actorRef",
+              "approvedAt",
+              "contentSha256",
+              "assetSha256",
+              "targetAccountRef",
+              "scope"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

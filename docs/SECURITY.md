@@ -58,3 +58,7 @@ Content must pass:
 - platform rules;
 - approval policy;
 - provider capability validation.
+
+## Reglas para futuras fases
+
+Consultar [development/OPERACION.md](development/OPERACION.md) y [development/REGLAS.md](development/REGLAS.md). Autenticación de aplicación, ownership, CSRF, cifrado persistente y aprobación del servidor son trabajo futuro; la sesión en memoria actual no se considera multiusuario.

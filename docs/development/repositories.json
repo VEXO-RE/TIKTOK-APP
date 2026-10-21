@@ -1,0 +1,232 @@
+{
+  "reviewedAt": "2026-10-04",
+  "installedByThisPhase": false,
+  "selectionCriteria": [
+    "primary maintainer",
+    "docs",
+    "existing stack fit",
+    "distinct role"
+  ],
+  "repositories": [
+    {
+      "repo": "expressjs/express",
+      "url": "https://github.com/expressjs/express",
+      "status": "Conservar",
+      "role": "Servidor HTTP actual",
+      "gate": "No cambiar arquitectura por un starter",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "expressjs/multer",
+      "url": "https://github.com/expressjs/multer",
+      "status": "Conservar",
+      "role": "Multipart actual",
+      "gate": "Preflight/durabilidad no resueltos por parser",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "ajv-validator/ajv",
+      "url": "https://github.com/ajv-validator/ajv",
+      "status": "Candidato principal",
+      "role": "JSON Schema",
+      "gate": "Habilitar formatos y schemas 2020-12 en implementación",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "colinhacks/zod",
+      "url": "https://github.com/colinhacks/zod",
+      "status": "Alternativa",
+      "role": "Contratos si TS",
+      "gate": "No duplicar contrato sin sincronización",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "brianc/node-postgres",
+      "url": "https://github.com/brianc/node-postgres",
+      "status": "Candidato",
+      "role": "Persistencia PostgreSQL",
+      "gate": "Migraciones/tenancy/outbox a implementar",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "taskforcesh/bullmq",
+      "url": "https://github.com/taskforcesh/bullmq",
+      "status": "Candidato",
+      "role": "Jobs/queue",
+      "gate": "Elegir versión/modalidad y configurar durabilidad",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "temporalio/sdk-typescript",
+      "url": "https://github.com/temporalio/sdk-typescript",
+      "status": "Reservado",
+      "role": "Workflows largos",
+      "gate": "No junto a BullMQ sin motivo",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "lovell/sharp",
+      "url": "https://github.com/lovell/sharp",
+      "status": "Candidato",
+      "role": "Derivados de imagen",
+      "gate": "Medios reales y receta versionada",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "FFmpeg/FFmpeg",
+      "url": "https://github.com/FFmpeg/FFmpeg",
+      "status": "Candidato",
+      "role": "Video/preflight",
+      "gate": "Binario con decoders adecuados; build/licencias aparte",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "remotion-dev/remotion",
+      "url": "https://github.com/remotion-dev/remotion",
+      "status": "Opcional",
+      "role": "Composición programática React",
+      "gate": "Revisar licencia/costo comercial; no es requisito",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "microsoft/playwright",
+      "url": "https://github.com/microsoft/playwright",
+      "status": "Candidato QA",
+      "role": "Pruebas UI",
+      "gate": "Navegadores instalados no prueban red/proveedor",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "open-telemetry/opentelemetry-js",
+      "url": "https://github.com/open-telemetry/opentelemetry-js",
+      "status": "Opcional",
+      "role": "Trazas operativas",
+      "gate": "Redactar PII y secrets",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "promptfoo/promptfoo",
+      "url": "https://github.com/promptfoo/promptfoo",
+      "status": "Opcional",
+      "role": "Evaluaciones IA",
+      "gate": "Calls reales con presupuesto separado",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "langfuse/langfuse",
+      "url": "https://github.com/langfuse/langfuse",
+      "status": "Opcional",
+      "role": "Prompts y observabilidad IA",
+      "gate": "Gobernanza/retención antes de enviar datos",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "modelcontextprotocol/typescript-sdk",
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk",
+      "status": "Candidato",
+      "role": "MCP oficial TS",
+      "gate": "Elegir release estable; APIs de main pueden cambiar",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "tiktok/tiktok-business-api-sdk",
+      "url": "https://github.com/tiktok/tiktok-business-api-sdk",
+      "status": "Reservado",
+      "role": "Business API oficial",
+      "gate": "No es SDK de Upload Developers ni autorización",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "TiendaNube/cli",
+      "url": "https://github.com/TiendaNube/cli",
+      "status": "Referencia",
+      "role": "Flujos de tema",
+      "gate": "No es SDK del catálogo ni necesario para fase 7",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "mermaid-js/mermaid",
+      "url": "https://github.com/mermaid-js/mermaid",
+      "status": "Referencia",
+      "role": "Diagramas/documentación",
+      "gate": "No requisito del runtime",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "gitleaks/gitleaks",
+      "url": "https://github.com/gitleaks/gitleaks",
+      "status": "Candidato QA",
+      "role": "Detección de secrets",
+      "gate": "Versiones/allowlist revisadas; no prueba ausencia total",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "actions/setup-node",
+      "url": "https://github.com/actions/setup-node",
+      "status": "Referencia",
+      "role": "CI Node",
+      "gate": "Fijar SHA verificado al adoptar",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "n8n-io/n8n",
+      "url": "https://github.com/n8n-io/n8n",
+      "status": "Alternativa",
+      "role": "Orquestación visual",
+      "gate": "Evaluar licencia/operación; no segundo motor implícito",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    },
+    {
+      "repo": "w3c/wcag",
+      "url": "https://github.com/w3c/wcag",
+      "status": "Referencia",
+      "role": "Accesibilidad",
+      "gate": "Guía no es certificación de UI",
+      "reviewedAt": "2026-10-04",
+      "reviewType": "primary_repository_docs",
+      "releasePinned": false
+    }
+  ]
+}

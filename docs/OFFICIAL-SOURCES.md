@@ -48,7 +48,7 @@ Verified: 2026-10-04
 - Implementation: `src/tiktok/developer/content/`.
 - Environment: Sandbox.
 - Implementation status: implemented.
-- Operational status: pending a real video upload.
+- Operational status: semiautomatic upload through final publication validated end-to-end; successful transfer with `SEND_TO_USER_INBOX`, Inbox receipt, and final publication manually confirmed by the user. See `PROJECT-VALIDATION.md` for user-provided evidence and the historical TikTok HTTP 500 x3 attempt.
 
 App Review Guidelines
 https://developers.tiktok.com/docs/en/app-review-guidelines
@@ -101,3 +101,7 @@ For every TikTok implementation add:
 
 Never treat memory or previous project code as authoritative TikTok
 documentation.
+
+## Fuentes de desarrollo revisadas el 2026-10-04
+
+Registro para futuras fases: [development/FUENTES.md](development/FUENTES.md). Repositorios primarios y criterios de adopción: [development/REPOSITORIOS.md](development/REPOSITORIOS.md). Disponibilidad documental no acredita autorización, conexión ni aprobación de producción.

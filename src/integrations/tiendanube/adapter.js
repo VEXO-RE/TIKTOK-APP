@@ -1,13 +1,12 @@
-export const tiendanubeAdapter = {
-  async listProducts() {
-    throw new Error("Tiendanube adapter not configured.");
-  },
+import { createTiendanubeCatalogService } from "./catalog.service.js";
 
-  async getProduct() {
-    throw new Error("Tiendanube adapter not configured.");
-  },
+export function createTiendanubeAdapter(options) {
+  const catalog = createTiendanubeCatalogService(options);
+  return Object.freeze({ listProducts: catalog.listProducts, listCategories: catalog.listCategories });
+}
 
-  async listCategories() {
-    throw new Error("Tiendanube adapter not configured.");
-  }
-};
+// Importing this module never reads credentials or contacts Tiendanube.
+export const tiendanubeAdapter = Object.freeze({
+  listProducts: options => createTiendanubeAdapter().listProducts(options),
+  listCategories: options => createTiendanubeAdapter().listCategories(options)
+});
